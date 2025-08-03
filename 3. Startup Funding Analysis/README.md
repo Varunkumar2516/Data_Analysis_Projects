@@ -5,6 +5,10 @@
 ![Status](https://img.shields.io/badge/status-completed-brightgreen?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.x-blue?style=flat-square)
 
+# __For View Streamlit Version Press Below Link__
+[__Streamlit_Version__](https://dataanalysisprojects-fpdw35a5e85vutbgz7ksxk.streamlit.app/)
+
+
 An Exploratory Data Analysis (EDA) project that investigates trends, insights, and patterns in **startup funding in India** using a cleaned dataset. This project is ideal for students and beginner data scientists interested in real-world business datasets and visual storytelling.
 
 ---

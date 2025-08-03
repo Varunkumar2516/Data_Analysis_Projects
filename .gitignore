@@ -1,0 +1,9 @@
+pyMINIPROJECTS/DICTIONARY/dictionaryproblem.py
+__pycache__/
+
+*.pyc
+
+FURTHER.MD
+
+.devcontainer
+*.devcontainer

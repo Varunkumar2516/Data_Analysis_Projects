@@ -8,8 +8,15 @@ st.set_page_config(layout="wide",page_title='Startup Analysis')
 
 
 #file 
-file='../Analysis_Notebook/Startup_Cleaned.csv'
-df=pd.read_csv(file)
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+file = os.path.join(BASE_DIR, "Analysis_Notebook", "Startup_Cleaned.csv")
+df = pd.read_csv(file)
+
+# file='../Analysis_Notebook/Startup_Cleaned.csv'
+# df=pd.read_csv(file)
 
 
 df_for_investor=df.copy()

@@ -27,16 +27,18 @@ df_for_investor=df_for_investor.explode('investor')
 requirement=df_for_investor.groupby("investor")['amount_per_investor'].sum().sort_values(ascending=False)
 top_10_investors=pd.DataFrame(requirement).sort_values(by='amount_per_investor',ascending=False).head()
 least_10=pd.DataFrame(requirement[requirement>0]).sort_values(by="amount_per_investor").head()
+df['startup']=df['startup'].apply(lambda x: x.strip().title())
+
 
 
 #////////////////////////////////////////////////////////////////Starting of Session 2 (Overall ANalysis)
 # Loading the Data Of Overall 2nd Session
 def overall_analysis():
   st.subheader("Highest Funded Companies in India")
-  fig,ax=plt.subplots(figsize=(8,5))
+  fig,ax=plt.subplots(figsize=(8,8))
   ax=sns.barplot(df.groupby("startup")['amount'].sum().sort_values(ascending=False).reset_index().head(10),x='startup',y='amount',hue='startup',linewidth=2,edgecolor='red')
 
-  plt.xticks(rotation=30)
+  plt.xticks(rotation=90)
   plt.tight_layout()
   plt.xlabel("Amount In Cr")
   plt.ylabel("Company Names")
@@ -52,6 +54,56 @@ def overall_analysis():
         fontsize=11
     )
   st.pyplot(fig)
+  st.subheader("Top 10 Investors ")
+  df_for_investor=df.copy()
+  df_for_investor['investor']=df_for_investor['investor'].str.split(",")
+  df_for_investor['Investor_num']=df_for_investor['investor'].apply(len)
+  df_for_investor['amount_per_investor']=df_for_investor['amount']/ df_for_investor['Investor_num']
+  df_for_investor=df_for_investor.explode('investor')
+  
+  requirement=df_for_investor.groupby("investor")['amount_per_investor'].sum().sort_values(ascending=False)
+  top_10_inverstors=pd.DataFrame(requirement.head(10))
+  fig,ax=plt.subplots(figsize=(8,8))
+  ax=sns.barplot(data=top_10_inverstors,edgecolor='red',linewidth=3,x='investor',y='amount_per_investor',hue='investor')
+
+  plt.xticks(rotation=90)
+  plt.tight_layout()
+  plt.xlabel("Amount In Cr")
+  plt.ylabel("Investor Names")
+  plt.title("Top 10 Investors ")
+
+  for i in ax.patches:
+    height=i.get_height()
+    ax.text(
+        i.get_x()+i.get_width()/2,
+        height,
+        f'{height:.0f}cr',
+        va='bottom',ha='center',
+        fontsize=11
+    )
+  st.pyplot(fig)
+  st.subheader("Top 10 sectors (vertical) receiving the most funding.")
+  fig,ax=plt.subplots(figsize=(8,8))
+  ax=sns.barplot(df.groupby("vertical")['amount'].sum().sort_values(ascending=False).reset_index().head(10),x='vertical',y='amount',hue='vertical',linewidth=2,edgecolor='red')
+
+  plt.xticks(rotation=90)
+  plt.tight_layout()
+  plt.xlabel("Sectors")
+  plt.ylabel("Amount in Cr")
+  plt.title("Top 10 Investors ")
+
+  for i in ax.patches:
+    height=i.get_height()
+    ax.text(
+        i.get_x()+i.get_width()/2,
+        height,
+        f'{height:.0f}cr',
+        va='bottom',ha='center',
+        fontsize=11
+    )
+  st.pyplot(fig)
+
+  
   st.header("Monthly Investment Trends")
   selected=st.selectbox("Select Option",['Total Funding Amount per Month',"Number of Funding Deals per Month"])
 
@@ -110,9 +162,170 @@ def overall_analysis():
 
 #////////////////////////////////////////////////////////////////Starting of Session 3 (Startups)
 # Loading the Data Of Startups 3th Session
-def load_startup_Details(investor):
- pass
-# ////////////////////////////////////////////////////////////////////////////////////////////End Of Session 4 (Investor) 
+def load_startup_Details(startup):
+  st.header("Sartups Details : ")
+  st.markdown(f"""
+        <div style='
+            background-color: #1f1f1f;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        '>
+            {startup}
+        </div>
+    """, unsafe_allow_html=True)
+  st.subheader("Most Recent Fundings")
+  startup_details=df[df['amount']!=0][df['startup']==startup].sort_values(by='Date').reset_index()
+  st.dataframe(startup_details.loc[:,['Date','startup','city','vertical','investor','amount']])
+  startup_details['cleaned_investor']=startup_details['investor'].str.split(",")
+  startup_details['Investor_no']=startup_details['cleaned_investor'].apply(len)
+  startup_details['Amount_per_investor']=startup_details['amount']/startup_details['Investor_no']
+  particular_startup=startup_details.explode("cleaned_investor").sort_values(by='Amount_per_investor',ascending=False).head(10)
+  def bar_chart():
+        
+        # Required Information 
+        # First chart of Highest Fundings
+        st.subheader("Top Investors Invested In Startup")
+        st.success("Note: We Are Assuming Group Investors Invest Equal Amount in Startups")
+        
+        fig=plt.figure(figsize=(10,5))
+        
+        
+        ax=sns.barplot(data=particular_startup,x='cleaned_investor',y='Amount_per_investor',hue='cleaned_investor',linewidth=2,edgecolor='red')
+        ax.set_xlabel('Investor Name')
+        ax.set_ylabel('Amount In Cr')
+        ax.set_title(f'Investors Invested in {startup}',fontsize=30)
+        for i in ax.patches:
+            height=i.get_height()
+            ax.text(
+            i.get_x() + i.get_width()/2 ,
+            height + 0.01*height,
+            f'{height:.2f}Cr',
+            fontsize=10,
+            color='black',
+            ha='center',
+            va='bottom'
+        )
+        plt.xticks(rotation=30)
+        st.pyplot(fig)
+    
+  try:
+    bar_chart()
+  except Exception as e:
+    print("No Data FOund",e)
+ 
+  st.header("Year Wise Analysis")
+  particular_startup['Date']=pd.to_datetime(particular_startup['Date'],format='%Y-%m-%d')
+  particular_startup['Year']=particular_startup['Date'].dt.year
+  year_wise=particular_startup.groupby('Year')["amount"].sum()
+ 
+  st.dataframe(year_wise.apply(lambda x:f"{x:.3f} Cr"))
+  st.line_chart(particular_startup.groupby('Year')["amount"].sum())
+ 
+
+  most_invested_year=year_wise[year_wise==year_wise.max()].index[0]
+  st.success(f"Year with the highest investment: {most_invested_year}")
+    
+  st.header("Key Analysis About Startup")
+  highest_investment= startup_details['amount'].max()
+  sector=startup_details.groupby("vertical")['amount'].sum().sort_values(ascending=False).index[0]
+  Citywise_group=startup_details.groupby("city")['amount'].sum().sort_values(ascending=False)
+  if highest_investment>0:
+        st.markdown("### Highest Investment Amount")
+        st.markdown(f"""
+            <div style='
+                background-color: #1f1f1f;
+                padding: 20px;
+                border-radius: 15px;
+                text-align: center;
+                color: white;
+                font-size: 24px;
+                font-weight: bold;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            '>
+                ₹ {highest_investment:.6f} Crore
+            </div>
+        """, unsafe_allow_html=True)
+        st.markdown("### Most Invested Startup Sector")
+        st.markdown(f"""
+            <div style='
+                background-color: #1f1f1f;
+                padding: 20px;
+                border-radius: 15px;
+                text-align: center;
+                color: white;
+                font-size: 24px;
+                font-weight: bold;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            '>
+                {sector} 
+            </div>
+        """, unsafe_allow_html=True)
+        st.markdown("### Highest Invested Startup City")
+        st.markdown(f"""
+            <div style='
+                background-color: #1f1f1f;
+                padding: 20px;
+                border-radius: 15px;
+                text-align: center;
+                color: white;
+                font-size: 24px;
+                font-weight: bold;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            '>
+                {Citywise_group.index[0]} 
+            </div>
+        """, unsafe_allow_html=True)
+        st.markdown("### Highest Invested Year")
+        st.markdown(f"""
+            <div style='
+                background-color: #1f1f1f;
+                padding: 20px;
+                border-radius: 15px;
+                text-align: center;
+                color: white;
+                font-size: 24px;
+                font-weight: bold;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            '>
+                {most_invested_year} 
+            </div>
+        """, unsafe_allow_html=True)
+  else:
+        st.markdown(f"""
+            <div style ='
+                background-color: #1f1f1f;
+                padding: 20px;
+                border-radius: 15px;
+                text-align: center;
+                color: white;
+                font-size: 24px;
+                font-weight: bold;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+              '>
+                      No Investment Records
+                      </div>""",unsafe_allow_html=True)
+        st.markdown("### Highest Investment")
+        st.markdown(f"""
+            <div style='
+                background-color: #1f1f1f;
+                padding: 20px;
+                border-radius: 15px;
+                text-align: center;
+                color: white;
+                font-size: 24px;
+                font-weight: bold;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            '>
+                Record Not Present
+            </div>
+        """, unsafe_allow_html=True)
+
+# ////////////////////////////////////////////////////////////////////////////////////////////End Of Session 3 Startups) 
 
 
 
@@ -395,9 +608,31 @@ def load_investor_Details(investor):
   try:
    bar_chart()
   except Exception as e:
-    st.info(f" Investor Data Not Found {e}")
+    st.info(f" Investor Data Not Found ")
 
 def bar_chart1():
+  col1,col2=st.columns(2)
+  Startup_10=df.groupby("startup")['amount'].sum().sort_values(ascending=False)
+  with col1:   
+    st.header("Top 5 Startups (in crore)")
+    st.bar_chart(data=Startup_10.head())
+  with col2:
+   st.header("Details")
+   top_10_investors['amount_per_investor']=top_10_investors['amount_per_investor'].apply(lambda x: f"{x} crore")
+   st.dataframe(Startup_10.head())
+
+def bar_chart2():
+ col1,col2=st.columns(2)
+ Startup_10=df[df['amount']!=0].groupby("startup")['amount'].sum().sort_values()
+ with col1:
+    st.header("Least 5 Startups (in crore)")
+    st.bar_chart(data=Startup_10.head())
+ with col2: 
+  st.header("Details")
+  least_10['amount_per_investor']=least_10['amount_per_investor'].apply(lambda x: f"{x:.5f} crore")
+  st.dataframe(Startup_10.head())
+
+def bar_chart3():
   col1,col2=st.columns(2)
   with col1:
     
@@ -409,7 +644,7 @@ def bar_chart1():
    top_10_investors['amount_per_investor']=top_10_investors['amount_per_investor'].apply(lambda x: f"{x} crore")
    st.dataframe(top_10_investors)
 
-def bar_chart2():
+def bar_chart4():
  col1,col2=st.columns(2)
  with col1:
     st.header("Least 5 Investor (in crore)")
@@ -423,17 +658,7 @@ def bar_chart2():
 # ////////////////////////////////////////////////////////////////////////////////////////////End Of Session 4 (Investor) 
 
 
-
-
-
-
-
-
-
-
-
-
-
+# main session
 
  
 #sidebar
@@ -470,13 +695,24 @@ elif Option.lower()=='overall analysis':
 
 # Startup  Infromation SEssion
 elif Option.lower()=='startup':
- st.title("Startup Analysis")
- st.sidebar.selectbox("Select Startup",df['startup'].sort_values().unique())  
+
+
+ x=list(df['startup'].sort_values().unique())
+ x.append(x[0])
+ x[0]="Default View"
+ selected=st.sidebar.selectbox("Select Startup",x)  
+     
  but1=st.sidebar.button("Find Startup Details ")
  
+ if selected=='Default View':
+     st.title("Startup Analysis")
+     bar_chart1()
+     bar_chart2()
+
  # on pressing button Further work
- if but1:
-   st.balloons()
+ else:
+    if selected or but1:
+        load_startup_Details(selected)
 
 
 
@@ -498,9 +734,9 @@ elif Option.lower()=='investor':
   if investor_Selected=='Default Analysis':
     st.title("investors Analysis")
     st.toast(f"Select the Investor and Press the Button For Details", icon="🎈")
-    bar_chart1()
+    bar_chart3()
     
-    bar_chart2()
+    bar_chart4()
   else:
     if investor_Selected or but2:
       load_investor_Details(investor_Selected)

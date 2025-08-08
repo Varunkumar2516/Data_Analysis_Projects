@@ -26,7 +26,7 @@ Welcome to the **Data Analysis Projects** repository! This collection of hands-o
 | Project No. | Project Title                                  | Status | Description                                                                 |
 |-------------|------------------------------------------------|--------|-----------------------------------------------------------------------------|
 | 1️⃣         | **Sugarcane Production Analysis**              | ✅ Done | EDA on sugarcane production dataset across different years and regions.     |
-| 2️⃣         | **Covid-19 Data Analysis**                     | ✅ Done | Analyze the global spread, trends, and impact of the Covid-19 pandemic.     |
+| 2️⃣         | **Covid-19 Data Analysis**                     | ✅ Done | Analyze the India spread, trends, and impact of the Covid-19 pandemic.     |
 
 > 🔜 More projects are coming soon! Stay tuned.
 

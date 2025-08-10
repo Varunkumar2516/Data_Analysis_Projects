@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from streamlit_option_menu import option_menu
 #title of our page
 
 st.set_page_config(layout="wide",page_title='Startup Analysis')
@@ -660,11 +661,67 @@ def bar_chart4():
 
 # main session
 
- 
+st.markdown(
+    """
+    <style>
+        [data-testid="stSidebarUserContent"] {
+            padding-top: 0rem;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 #sidebar
-st.sidebar.title("Startup Funding Analysis")
-Option=st.sidebar.selectbox('Select Option ',['Data Overview','Overall Analysis','Startup','investor'])
-
+with st.sidebar:
+    st.markdown(
+    """
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <h3 style="
+        text-align:center;
+        font-size: 40px;
+        font-family: 'Pacifico', cursive;
+        background: linear-gradient(to right, green, yellow, orange, red, pink, blue);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: normal;
+        ">
+        Welcome
+    </h1>
+    """,
+    unsafe_allow_html=True
+)
+    Option = option_menu(
+        menu_title="Menu",
+        options=["Data Overview", "Overall Analysis", "Startup", "Investor"],
+        icons=["table", "bar-chart", "rocket", "person"],
+        menu_icon="list",
+        default_index=0,
+        styles={
+            "container": {"background-color": "#0e1117"},
+            "icon": {"color": "white", "font-size": "20px"},
+            "nav-link": {
+                "color": "white",
+                "font-size": "18px",
+                "text-align": "left",
+                "margin": "5px"
+            },
+            "nav-link-selected": {"background-color": "#ff4b4b"},
+        }
+    )
+    
+st.markdown("""
+<style>
+div[data-baseweb="select"] > div {
+    background-color: #1e1e1e;  /* Match your sidebar background */
+    color: white;
+    border-radius: 8px;
+    border: 1px solid #555;
+}
+div[data-baseweb="select"] svg {
+    fill: white; /* Dropdown arrow color */
+}
+</style>
+""", unsafe_allow_html=True)
 
 
 
@@ -723,7 +780,7 @@ elif Option.lower()=='investor':
 
  x=sorted(set(df['investor'].str.split(',').sum()))
  x[0]='Default Analysis'
- investor_Selected=st.sidebar.selectbox("Select startup",x)
+ investor_Selected=st.sidebar.selectbox("Select Investor",x)
 
  but2=st.sidebar.button("Find investor Details")
 

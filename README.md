@@ -28,7 +28,7 @@ Welcome to the **Data Analysis Projects** repository! This collection of hands-o
 | 1️⃣         | **Sugarcane Production Analysis**              | ✅ Done | EDA on sugarcane production dataset across different years and regions.     |
 | 2️⃣         | **Covid-19 Data Analysis**                     | ✅ Done | Analyze the India spread, trends, and impact of the Covid-19 pandemic.     |
 | 3️⃣         | **Startup Funding Analysis**                     | ✅ Done | Analyze the Startups Funding of year (2014-2017) , Analyse about the Investors and there Interesets     |
-| 4️⃣         | **IPL DATA (2008-2025) Analysis**                     | ✅ Done | Analyze the IPL data 2008 to 2025 , Analyze about different Trends and Analysis     |
+| 4️⃣         | **IPL DATA (2008-2025) Analysis**                     | Not Completed Yet | Because of some issues with Integration of data     |
 > 🔜 More projects are coming soon! Stay tuned.
 
 ---

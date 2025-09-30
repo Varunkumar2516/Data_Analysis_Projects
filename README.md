@@ -29,6 +29,7 @@ Welcome to the **Data Analysis Projects** repository! This collection of hands-o
 | 2️⃣         | **Covid-19 Data Analysis**                     | ✅ Done | Analyze the India spread, trends, and impact of the Covid-19 pandemic.     |
 | 3️⃣         | **Startup Funding Analysis**                     | ✅ Done | Analyze the Startups Funding of year (2014-2017) , Analyse about the Investors and there Interesets     |
 | 4️⃣         | **IPL DATA (2008-2025) Analysis**                     | Not Completed Yet | Because of some issues with Integration of data     |
+| 5️⃣         | **Titanic EDA- Data Analysis Project**                     | ✅ Done | Analysis the DIfferent insights from the data set about the Titanic |
 > 🔜 More projects are coming soon! Stay tuned.
 
 ---

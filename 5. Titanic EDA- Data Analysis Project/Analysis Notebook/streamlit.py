@@ -24,7 +24,12 @@ def load_data(file_path):
         return None
 
 # Load the dataset
-df = load_data('DATASET/datasets/train.csv')
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+file = os.path.join(BASE_DIR, "DATASET", "datasets",'train.csv')
+df = pd.read_csv(file)
+
 
 # --- Main Application ---
 if df is not None:

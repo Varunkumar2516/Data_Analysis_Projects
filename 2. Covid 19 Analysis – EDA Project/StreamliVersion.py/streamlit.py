@@ -8,6 +8,13 @@ st.set_page_config(
     page_icon="🦠",
     layout="wide"
 )
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+file1 = os.path.join(BASE_DIR,"Datasets",'covid_19_india.csv')
+file2 = os.path.join(BASE_DIR, "Datasets",'covid_vaccine_statewise.csv')
+
+
 
 # ----------------- Data Loading and Caching -----------------
 # Cache data loading to improve performance
@@ -16,10 +23,10 @@ def load_data():
     """Loads, cleans, and preprocesses the COVID-19 and vaccination data."""
     
     # Load COVID-19 case data
-    covid_df = pd.read_csv("covid_19_india.csv")
+    covid_df = pd.read_csv(file1)
     
     # Load vaccination data
-    vaccine_df = pd.read_csv("covid_vaccine_statewise.csv")
+    vaccine_df = pd.read_csv(file2)
 
     # --- Preprocessing COVID-19 Data ---
     covid_df.drop(["Sno", "Time", "ConfirmedIndianNational", "ConfirmedForeignNational"], axis=1, inplace=True)

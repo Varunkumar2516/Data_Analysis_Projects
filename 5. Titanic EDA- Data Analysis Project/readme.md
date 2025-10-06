@@ -1,6 +1,7 @@
 # 🚢 Titanic Survival Analysis – EDA Project
 
 ### 🔗 [View Streamlit Version](https://5-titaniceda-dataanalysisprojectanalysisnotebo-2moqyk.streamlit.app/)
+### 🔗 [View DashBoard Version](https://varunkumar2516.github.io/Data_Analysis_Projects/5.%20Titanic%20EDA-%20Data%20Analysis%20Project/Analysis%20Notebook/dasdboard.html)
 
 An **Exploratory Data Analysis (EDA)** project that dives into the classic **Titanic dataset** to uncover factors that influenced passenger survival.  
 This analysis explores passenger demographics, ticket class, fare, and more — to understand what determined who survived the tragic event.

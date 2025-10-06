@@ -6,6 +6,8 @@
 
 ---
 
+### 🔗 [View Streamlit Version]()
+
 ## 📌 Project Overview
 
 This project focuses on **Exploratory Data Analysis (EDA)** of COVID-19 in India, utilizing publicly available datasets. The goal is to extract insights related to case trends, state-wise comparisons, vaccination distribution, and gender-based vaccination patterns.

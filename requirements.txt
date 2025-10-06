@@ -4,3 +4,4 @@ pandas
 numpy
 seaborn
 streamlit-option-menu
+plotly
